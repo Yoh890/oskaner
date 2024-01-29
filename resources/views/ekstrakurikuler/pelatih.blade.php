@@ -1,0 +1,79 @@
+@extends('layouts.master')
+@section('content')
+
+<div class="card-header">
+    <h3 class="card-title">Absen Pelatih {{ $ekstra->ekstra }}</h3>
+  </div>
+  <!-- /.card-header -->
+  <div class="card-body">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Tambah
+      </button>
+    <hr>
+    <table id="example1" class="table table-bordered table-striped">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Kehadiran</th>
+        <th>Ekstrakurikuler</th>
+        <th>Pelapor</th>
+        <th>Tanggal</th>
+        <th>Aksi</th>
+      </tr>
+      </thead>
+      <tbody>
+@foreach($pelatih as $row)
+      <tr>
+        <td>{{$loop->iteration}}</td>
+        <td>{{$row->kehadiran}}</td>
+        <td>{{$row->ekstra->ekstra}}</td>
+        <td>{{$row->pelapor}}</td>
+        <td>{{$row->created_at}}</td>
+        <td>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                      </svg>
+                </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="{{ route('pelatih_hapus', $row->id) }}" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</a>
+            </div>
+            </div>
+        </td>
+      </tr>
+@endforeach
+      </tbody>
+    </table>
+  </div>
+  <!-- Modal Tambah-->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Absen Pelatih</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form method="POST" action="{{ route('pelatih_absen', $ekstra->id) }}">
+            @csrf
+            <div class="modal-body">
+                <div class="form-group">
+                      <label for="">Kehadiran</label>
+                      <select name="kehadiran" id="kelasan" class="form-control">
+                          <option selected disabled>Keterangan</option>
+                          <option value="Hadir">Hadir</option>
+                          <option value="Tidak Hadir">Tidak Hadir</option>
+                      </select>
+                </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+          <button type="submit" class="btn btn-primary">Absen</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  @endsection
