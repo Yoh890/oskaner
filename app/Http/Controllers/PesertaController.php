@@ -65,7 +65,7 @@ class PesertaController extends Controller
         // Lakukan logika reset kehadiran di sini, misalnya mengatur ulang nilai-nilai pada tabel peserta
 
         // Contoh: Mengatur ulang semua nilai hadir, sakit, ijin, dan alpa menjadi 0
-        Peserta::where('ekstra_id', $ekstra_id)->update(['hadir' => 0, 'sakit' => 0, 'ijin' => 0, 'alpa' => 0]);
+        Peserta::where('ekstra_id', $ekstra_id)->update(['hadir' => 0, 'sakit' => 0, 'ijin' => 0, 'alpa' => 0, 'predikat' => "-", 'deskripsi' => "-"]);
 
         return redirect()->back()->with('toast_success', 'Data kehadiran berhasil direset.');
     }

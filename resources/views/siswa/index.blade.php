@@ -15,7 +15,7 @@
         Import
       </button>
       <button class="btn btn-success" data-toggle="modal" data-target="#naikKelasModal">Naik Kelas</button>
-      <a href="{{ route('siswa_reset') }}" class="btn btn-danger" onclick="return confirm('Apakah anda yakin ingin mereset point?')">Reset Point</a>
+      {{-- <a href="{{ route('siswa_reset') }}" class="btn btn-danger" onclick="return confirm('Apakah anda yakin ingin mereset point?')">Reset</a> --}}
     <hr>
     <div class="form-group">
         <form action="" method="GET">

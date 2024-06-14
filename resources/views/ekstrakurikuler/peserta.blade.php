@@ -19,12 +19,12 @@
       @if (in_array(auth()->user()->level, ['admin', 'osis', 'waka']))
       <form method="POST" action="{{ route('peserta_reset', $ekstra->id) }}">
         @csrf
-        <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin mereset kehadiran?')">Reset Kehadiran</button>
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin mereset kehadiran? Tindakan ini juga akan mereset predikat')">Reset Kehadiran</button>
     </form>&nbsp;
     <form method="POST" action="{{ route('absendat_hapus', $ekstra->id) }}">
         @csrf
         @method('DELETE')
-        <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus semua data absen?')">Hapus Semua Data Absen</button>
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus semua data absen?')"><i class="fa fa-trash"></i></button>
     </form>
     @endif
     </div>
