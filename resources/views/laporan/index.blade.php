@@ -2,12 +2,15 @@
 @section('content')
 
 <div class="card-header">
-    <h3 class="card-title">Laporan Pelanggaran</h3>
-  </div>
+    <div class="d-flex justify-content-between align-items-center">
+        <h3 class="card-title">Laporan Pelanggaran</h3>
+        <a href="{{ route('lap_tambah') }}" class="mb-0 btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i></a>
+    </div>
+</div>
   <!-- /.card-header -->
   <div class="card-body">
-    <a href="{{ route('lap_tambah') }}" class="btn btn-primary">Tambah</a>
-    <hr>
+      <p>Data laporan untuk tanggal : {{ \Carbon\Carbon::now()->format('d-m-Y') }}</p>
+      <hr>
     <table id="example1" class="table table-bordered table-striped">
       <thead>
       <tr>
@@ -47,7 +50,7 @@
                 </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 {{-- <a class="dropdown-item" data-toggle="modal" data-target="#editModal-{{ $row->id }}">Edit</a> --}}
-                <a class="dropdown-item" href="{{ route('lap_hapus', $row->id) }}" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</a>
+                <a class="dropdown-item" href="{{ route('lap_hapus', $row->id) }}" data-confirm-delete="true">Hapus</a>
             </div>
             </div>
         </td>

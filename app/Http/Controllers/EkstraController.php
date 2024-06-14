@@ -13,6 +13,10 @@ class EkstraController extends Controller
         $ekstra =DB::table('ekstra')
         ->get();
 
+        $title = 'Hapus Ekstrakurikuler!';
+        $text = "Apakah anda yakin?";
+        confirmDelete($title, $text);
+
         //dd($admin);
         return  view('ekstrakurikuler.ekstra',compact(['ekstra']));
     }
@@ -22,20 +26,20 @@ class EkstraController extends Controller
         $simpan = Ekstra::create([
             'ekstra' => $request->ekstra
         ]);
-        return  redirect('ekstra');
+        return  back()->with('toast_success','Berhasil menambahkan ekstrakurikuler');
     }
 
     public function update($id, Request $request)
     {
         $ekstra = Ekstra::find($id);
         $ekstra->update($request->except('token','_method'));
-        return  redirect('ekstra');
+        return  back()->with('toast_success','Berhasil');
     }
 
     public function hapus($id)
     {
         $hapus = Ekstra::find($id);
         $hapus->delete();
-        return  redirect('ekstra');
+        return  back()->with('toast_success','Berhasil');
     }
 }

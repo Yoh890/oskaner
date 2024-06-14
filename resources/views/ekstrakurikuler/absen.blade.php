@@ -83,6 +83,7 @@
 
       <div class="card-footer">
             <input type="submit" class="btn btn-primary" value="Simpan">
+            <a class="btn btn-warning" href="{{ route('ekstra') }}">Kembali</a>
       </div>
   </div>
 </form>

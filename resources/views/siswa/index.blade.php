@@ -2,16 +2,19 @@
 @section('content')
 
 <div class="card-header">
-    <h3 class="card-title">Data Siswa</h3>
-  </div>
+    <div class="d-flex justify-content-between align-items-center">
+        <h3 class="card-title">Data Siswa</h3>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+        </button>
+    </div>
+</div>
   <!-- /.card-header -->
   <div class="card-body">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        Tambah
-      </button>
     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#import">
         Import
       </button>
+      <button class="btn btn-success" data-toggle="modal" data-target="#naikKelasModal">Naik Kelas</button>
       <a href="{{ route('siswa_reset') }}" class="btn btn-danger" onclick="return confirm('Apakah anda yakin ingin mereset point?')">Reset Point</a>
     <hr>
     <div class="form-group">
@@ -19,14 +22,14 @@
             <div class="row">
                 <div class="col-md-3">
                     <select name="kelas" id="" class="form-control">
-                        <option selected value="">Semua Kelas</option>
+                        <option selected disabled >Pilih Kelas</option>
                         @foreach ($kel as $item)
                         <option value="{{ $item->id }}" {{ Request::get('kelas') == $item->id ? 'selected' : '' }}>{{ $item->kelas }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <button type="submit" class="btn btn-secondary">Filter Data</button>
+                    <button type="submit" class="btn btn-secondary">Tampilkan</button>
                 </div>
             </div>
         </form>
@@ -63,7 +66,7 @@
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" data-toggle="modal" data-target="#editModal-{{ $row->id }}">Edit</a>
                 @if (in_array(auth()->user()->level, ['admin', 'waka']))
-                <a class="dropdown-item" href="{{ route('sis_hapus', $row->id) }}" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</a>
+                <a class="dropdown-item" href="{{ route('sis_hapus', $row->id) }}" data-confirm-delete="true">Hapus</a>
             @endif
             </div>
             </div>
@@ -87,14 +90,14 @@
         <form method="POST" action="{{ route('sis_simpan') }}">
             @csrf
         <div class="modal-body">
-    <div class="form-group">
-            <label for="">Nama</label>
+            <div class="form-group">
+                <label for="">Nama</label>
             <input type="text" name="nama" class="form-control" id="" placeholder=" " required>
     </div>
     <div class="form-group">
             <label for="">Kelas</label>
             <select name="kelas_id" class="form-control">
-                <option selected disabled>Silahkan Dipilih</option>
+                <option selected disabled>Pilih Kelas</option>
                 @foreach($kel as $kelas)
                     <option value="{{ $kelas->id }}">{{ $kelas->kelas }}</option>
                 @endforeach
@@ -126,6 +129,7 @@
         <form method="POST" action="{{ route('sis_import') }}" enctype="multipart/form-data">
             @csrf
         <div class="modal-body">
+            <p><b>Note : </b>untuk format dari excel harus sama dengan template (<a href="#" target="_blank">download template</a>). Untuk kelas pastikan id harus sama dengan yang ada di menu <a href="{{ route('kel') }}">Kelas</a></p>
     <div class="form-group">
             <input type="file" name="file" required>
     </div>
@@ -161,7 +165,7 @@
             <div class="form-group">
                 <label for="">Kelas</label>
                 <select name="kelas_id" class="form-control">
-                    <option selected disabled>Silahkan Dipilih</option>
+                    <option selected disabled>Pilih Kelas</option>
                     @foreach($kel as $kelas)
                         <option value="{{ $kelas->id }}" {{ $kelas->id == $data->kelas_id ? 'selected' : '' }}>
                             {{ $kelas->kelas }}
@@ -183,5 +187,46 @@
   </div>
 </div>
   @endforeach
-
+<!-- Modal -->
+<div class="modal fade" id="naikKelasModal" tabindex="-1" role="dialog" aria-labelledby="naikKelasModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="naikKelasModalLabel">Naik Kelas</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+         <form action="{{ route('siswa.naikKelasMassal') }}" method="POST">
+          @csrf
+          <div class="modal-body">
+              <p><b>Panduan : </b>Untuk naik kelas harus dimulai dari tingkat tertinggi terlebih dahulu (dari kelas XII ke lulus, lalu kelas XI ke XII, dan Kelas X ke kelas XI)</p>
+            <div class="form-group">
+              <label for="kelas_asal">Kelas Asal</label>
+              <select name="kelas_asal" class="form-control" required>
+                <option selected disabled>Pilih Kelas Asal</option>
+                @foreach($kel as $kelas)
+                  <option value="{{ $kelas->id }}">{{ $kelas->kelas }}</option>
+                @endforeach
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="kelas_tujuan">Kelas Tujuan</label>
+              <select name="kelas_tujuan" class="form-control" required>
+                <option selected disabled>Pilih Kelas Tujuan</option>
+                @foreach($kel as $kelas)
+                  <option value="{{ $kelas->id }}">{{ $kelas->kelas }}</option>
+                @endforeach
+                <option value="lulus">Lulus</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+            <button type="submit" class="btn btn-primary" onclick="return confirm ('Pastikan sebelum mengirim, harus sesuai dengan panduan. Apakah data yang ada masukkan sudah benar')">Naik Kelas</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 @endsection

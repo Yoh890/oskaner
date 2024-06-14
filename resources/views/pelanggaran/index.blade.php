@@ -2,16 +2,17 @@
 @section('content')
 
 <div class="card-header">
-    <h3 class="card-title">Pelanggaran</h3>
-  </div>
+    <div class="d-flex justify-content-between align-items-center">
+        <h3 class="card-title">Pelanggaran</h3>
+        @if (in_array(auth()->user()->level, ['admin', 'bk', 'waka']))
+        <button type="button" class="mb-0 btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+        </button>
+        @endif
+    </div>
+</div>
   <!-- /.card-header -->
   <div class="card-body">
-    @if (in_array(auth()->user()->level, ['admin', 'bk', 'waka']))
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        Tambah
-      </button>
-    <hr>
-    @endif
     <table id="example1" class="table table-bordered table-striped">
       <thead>
       <tr>
@@ -39,7 +40,7 @@
                 </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" data-toggle="modal" data-target="#editModal-{{ $row->id }}">Edit</a>
-                <a class="dropdown-item" href="{{ route('pel_hapus', $row->id) }}" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</a>
+                <a class="dropdown-item" href="{{ route('pel_hapus', $row->id) }}" data-confirm-delete="true">Hapus</a>
             </div>
         </td>
         @endif

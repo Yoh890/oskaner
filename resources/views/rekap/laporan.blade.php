@@ -2,17 +2,14 @@
 @section('content')
 
 <div class="card-header">
-    <h3 class="card-title">Laporan Pelanggaran</h3>
-  </div>
+    <div class="d-flex justify-content-between align-items-center">
+        <h3 class="card-title">Laporan Pelanggaran</h3>
+        <a class="mb-0 btn btn-danger" href="{{ route('lapdat_hapus') }}" data-confirm-delete="true"><i class="fa fa-trash" aria-hidden="true" data-confirm-delete="true"></i></a>
+    </div>
+</div>
   <!-- /.card-header -->
   <div class="card-body">
-    <div class="row">
-    <form method="POST" action="{{ route('lapdat_hapus') }}">
-        @csrf
-        @method('DELETE')
-        <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus semua laporan pelanggaran?')">Hapus Semua Data Laporan</button>
-    </form>
-    </div>
+    <p>{{ $jumlah }} Laporan</p>
     <hr>
     <div class="form-group">
         <form action="" method="GET">
@@ -42,7 +39,7 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <button type="submit" class="btn btn-secondary">Filter Data</button>
+                    <button type="submit" class="btn btn-secondary">Tampilkan</button>
                 </div>
             </div>
         </form>

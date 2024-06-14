@@ -2,18 +2,20 @@
 @section('content')
 
 <div class="card-header">
-    <h3 class="card-title">Absen Pelatih {{ $ekstra->ekstra }}</h3>
-  </div>
+    <div class="d-flex justify-content-between align-items-center">
+        <h3 class="card-title">Absen Pelatih dan Latihan {{ $ekstra->ekstra }}</h3>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+        </button>
+    </div>
+</div>
   <!-- /.card-header -->
   <div class="card-body">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        Tambah
-      </button>
-    <hr>
     <table id="example1" class="table table-bordered table-striped">
       <thead>
       <tr>
         <th>#</th>
+        <th>Latihan</th>
         <th>Kehadiran</th>
         <th>Ekstrakurikuler</th>
         <th>Pelapor</th>
@@ -25,6 +27,7 @@
 @foreach($pelatih as $row)
       <tr>
         <td>{{$loop->iteration}}</td>
+        <td>{{$row->latihan}}</td>
         <td>{{$row->kehadiran}}</td>
         <td>{{$row->ekstra->ekstra}}</td>
         <td>{{$row->pelapor}}</td>
@@ -37,7 +40,7 @@
                       </svg>
                 </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="{{ route('pelatih_hapus', $row->id) }}" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</a>
+                <a class="dropdown-item" href="{{ route('pelatih_hapus', $row->id) }}" data-confirm-delete="true">Hapus</a>
             </div>
             </div>
         </td>
@@ -60,11 +63,19 @@
             @csrf
             <div class="modal-body">
                 <div class="form-group">
-                      <label for="">Kehadiran</label>
+                      <label for="">Latihan</label>
+                      <select name="latihan" id="kelasan" class="form-control">
+                          <option selected disabled>Keterangan</option>
+                          <option value="Latihan">Latihan</option>
+                          <option value="Tidak Latihan">Tidak Latihan</option>
+                      </select>
+<br>
+                      <label for="">Kehadiran Pelatih</label>
                       <select name="kehadiran" id="kelasan" class="form-control">
                           <option selected disabled>Keterangan</option>
                           <option value="Hadir">Hadir</option>
                           <option value="Tidak Hadir">Tidak Hadir</option>
+                          <option value="Tanpa Pelatih">Tanpa Pelatih</option>
                       </select>
                 </div>
         </div>

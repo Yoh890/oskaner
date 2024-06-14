@@ -19,6 +19,10 @@ class PelatihController extends Controller
         ->get();
         $ekstra = Ekstra::findOrFail($id);
 
+        $title = 'Hapus Laporan!';
+        $text = "Apakah anda yakin?";
+        confirmDelete($title, $text);
+
         //dd($admin);
         return  view('ekstrakurikuler.pelatih',compact(['pelatih','ekstra']));
     }
@@ -27,18 +31,19 @@ class PelatihController extends Controller
     {
         $user = Auth::user();
         $simpan = Pelatih::create([
+            'latihan' => $request->latihan,
             'kehadiran' => $request->kehadiran,
             'ekstra_id' => $id,
             'pelapor' => $user->name
         ]);
-        return back();
+        return back()->with('toast_success','Berhasil');;
     }
 
     public function hapus($id)
     {
         $hapus = Pelatih::find($id);
         $hapus->delete();
-        return  back();
+        return  back()->with('toast_success','Berhasil');;
     }
 
     public function rekap(Request $request)
@@ -47,9 +52,9 @@ class PelatihController extends Controller
 
         $mulai = $request->input('mulai');
         $akhir = $request->input('akhir');
-        if ($mulai && $akhir) {
+        // if ($mulai && $akhir) {
             $pelatihQuery->whereBetween('created_at', [$mulai, $akhir]);
-        }
+        // }
 
         $ekstraIdFilter = $request->input('ekskul');
         if ($ekstraIdFilter) {
@@ -57,8 +62,29 @@ class PelatihController extends Controller
         }
         // dd($pelatihQuery->toSql());
 
+        // Menghitung jumlah kegiatan yang sesuai filter
+        $jumlah = Pelatih::count();
+
         $pelatih = $pelatihQuery->latest()->get();
         $ekstra = Ekstra::all();
-        return  view('rekap.ekskul', compact(['pelatih','ekstra']));
+
+
+        $latihanBulanIniQuery = Pelatih::where('latihan', 'Latihan');
+        $pelatihBulanIniQuery = Pelatih::where('kehadiran', 'Hadir');
+
+        // if ($mulai && $akhir) {
+            $latihanBulanIniQuery->whereBetween('created_at', [$mulai, $akhir]);
+            $pelatihBulanIniQuery->whereBetween('created_at', [$mulai, $akhir]);
+        // }
+
+        if ($ekstraIdFilter) {
+            $latihanBulanIniQuery->where('ekstra_id', $ekstraIdFilter);
+            $pelatihBulanIniQuery->where('ekstra_id', $ekstraIdFilter);
+        }
+
+        $latihanBulanIni = $latihanBulanIniQuery->count();
+        $pelatihBulanIni = $pelatihBulanIniQuery->count();
+
+        return  view('rekap.ekskul', compact(['pelatih','ekstra','jumlah','latihanBulanIni','pelatihBulanIni']));
     }
 }

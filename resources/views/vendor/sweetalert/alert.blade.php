@@ -8,7 +8,7 @@
     @endif
 
     @if (config('sweetalert.alwaysLoadJS') === false && config('sweetalert.neverLoadJS') === false)
-        <script src="{{ $cdn ?? asset('vendor/sweetalert/sweetalert.all.js') }}"></script>
+        <script src="{{ $cdn ?? url('public/vendor/sweetalert/sweetalert.all.js') }}"></script>
     @endif
     <script>
         @if (Session::has('alert.delete'))
@@ -19,7 +19,7 @@
                         if (result.isConfirmed) {
                             var form = document.createElement('form');
                             form.action = event.target.href;
-                            form.method = 'POST';
+                            form.method = 'GET';
                             form.innerHTML = `
                     @csrf
                     @method('DELETE')

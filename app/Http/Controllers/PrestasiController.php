@@ -26,6 +26,10 @@ class PrestasiController extends Controller
         $sis = Siswa::all();
         $todayDate = Carbon::now()->format('Y-m-d');
 
+        $title = 'Hapus Data!';
+        $text = "Apakah anda yakin?";
+        confirmDelete($title, $text);
+
         //dd($admin);
         return  view('prestasi',compact(['prestasi','kel','sis']));
     }
@@ -47,14 +51,14 @@ class PrestasiController extends Controller
     {
         $prestasi = Prestasi::find($id);
         $prestasi->update($request->except('token','_method'));
-        return  redirect('prestasi');
+        return  back()->with('toast_success','Berhasil');
     }
 
     public function hapus($id)
     {
         $hapus = Prestasi::find($id);
         $hapus->delete();
-        return  redirect('prestasi');
+        return  back()->with('toast_success','Berhasil');
     }
 
     public function welcome()

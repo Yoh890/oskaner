@@ -13,6 +13,10 @@ class PelanggaranController extends Controller
     {
         $pelan = DB::table('pelanggaran')->get();
 
+        $title = 'Hapus Pelanggaran!';
+        $text = "Apakah anda yakin?";
+        confirmDelete($title, $text);
+
         //dd($admin);
         return  view('pelanggaran.index',compact(['pelan']));
     }
@@ -28,7 +32,7 @@ class PelanggaranController extends Controller
             'pelanggaran' => $request->pelanggaran,
             'point' => $request->point
         ]);
-        return  redirect('pelanggaran');
+        return  back()->with('toast_success','Berhasil');
     }
 
     public function ubah($id)
@@ -41,13 +45,13 @@ class PelanggaranController extends Controller
     {
         $pelanggaran = Pelanggaran::find($id);
         $pelanggaran->update($request->except('token','_method'));
-        return  redirect('pelanggaran');
+        return  back()->with('toast_success','Berhasil');
     }
 
     public function hapus($id)
     {
         $hapus = Pelanggaran::find($id);
         $hapus->delete();
-        return  redirect('pelanggaran');
+        return  back()->with('toast_success','Berhasil');
     }
 }

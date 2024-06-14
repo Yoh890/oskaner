@@ -28,7 +28,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="/" class="nav-link">Beranda</a>
+        <a href="./" class="nav-link">Beranda</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="https://wa.me/62881026956146" target="_blank" class="nav-link">Bantuan</a>
@@ -307,7 +307,7 @@
                   @if (in_array(auth()->user()->level, ['admin', 'waka']))
                   <li class="nav-item">
                     <a href="{{ route('rekap_pelatih') }}" class="nav-link {{ $currentRoute === 'rekap_pelatih' ? 'active' : '' }}">
-                      <p>Absen Pelatih</p>
+                      <p>Latihan + Pelatih</p>
                     </a>
                   </li>
                   @endif
@@ -367,7 +367,7 @@
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="float-right d-none d-sm-block">
-      <b>Version</b> 1.0
+      <b>Version</b> 1.5
     </div>
     <strong>Copyright &copy; 2024 <a href="https://instagram.com/yohanalilham" target="_blank">Joo</a>.</strong> All rights reserved.
   </footer>
@@ -377,6 +377,7 @@
     <!-- Control sidebar content goes here -->
   </aside>
   <!-- /.control-sidebar -->
+  @include('sweetalert::alert')
 </div>
 <!-- ./wrapper -->
 

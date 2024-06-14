@@ -12,6 +12,7 @@ class KegiatanController extends Controller
 {
     public function index(Request $request)
     {
+        $todayDate = Carbon::now()->format('Y-m-d');
         $kegiatanQuery = DB::table('kegiatan');
 
         // Filter berdasarkan tanggal
@@ -19,12 +20,21 @@ class KegiatanController extends Controller
         $akhir = $request->input('akhir');
         if ($mulai && $akhir) {
             $kegiatanQuery->whereBetween('tgl', [$mulai, $akhir]);
+        }else {
+            $kegiatanQuery->where('tgl', $todayDate);
         }
+
+        // Menghitung jumlah kegiatan yang sesuai filter
+        $jumlah = $kegiatanQuery->count();
 
         $kegiatan = $kegiatanQuery->latest()->get();
 
+        $title = 'Hapus Laporan!';
+        $text = "Apakah anda yakin?";
+        confirmDelete($title, $text);
+
         //dd($admin);
-        return  view('osis.index',compact(['kegiatan']));
+        return  view('osis.index',compact(['kegiatan','jumlah']));
     }
 
     public function simpan(Request $request)
@@ -35,20 +45,20 @@ class KegiatanController extends Controller
             'link' => $request->link,
             'tgl' => $request->tgl
         ]);
-        return  redirect('kegiatan')->with('toast_success','Berhasil menambahkan laporan kegiatan');
+        return  back()->with('toast_success','Berhasil menambahkan laporan kegiatan');
     }
 
     public function update($id, Request $request)
     {
         $kegiatan = Kegiatan::find($id);
         $kegiatan->update($request->except('token','_method'));
-        return  redirect('kegiatan');
+        return  back()->with('toast_success','Berhasil');
     }
 
     public function hapus($id)
     {
         $hapus = Kegiatan::find($id);
         $hapus->delete();
-        return  redirect('kegiatan');
+        return  back()->with('toast_success','Berhasil');
     }
 }

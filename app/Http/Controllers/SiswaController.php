@@ -18,14 +18,20 @@ class SiswaController extends Controller
 
     public function index(Request $request)
     {
-        $siswaQuery = Siswa::with('kelas');
         $kelasIdFilter = $request->input('kelas');
-        if ($kelasIdFilter) {
-            $siswaQuery->where('kelas_id', $kelasIdFilter);
-        }
+        $siswa = Siswa::with('kelas')
+            ->where('kelas_id', $kelasIdFilter)
+            ->get();
+        // if ($kelasIdFilter) {
+        //     $siswaQuery->where('kelas_id', $kelasIdFilter);
+        // }
 
-        $siswa = $siswaQuery->get();
+        // $siswa = $siswaQuery->get();
         $kel = Kelas::all();
+
+        $title = 'Hapus Data!';
+        $text = "Apakah anda yakin?";
+        confirmDelete($title, $text);
 
         //dd($admin);
         return  view('siswa.index',compact(['siswa','kel']));
@@ -38,6 +44,11 @@ class SiswaController extends Controller
         $hitpres = Prestasi::where('siswa_id',$id)->count();
         $laporan = Laporan::where('siswa_id',$id)->get();
         $ek = Peserta::where('siswa_id',$id)->count();
+
+        $title = 'Hapus Laporan!';
+        $text = "Apakah anda yakin?";
+        confirmDelete($title, $text);
+
         return  view('view',compact(['siswa','prestasi','laporan','hitpres','ek']));
     }
 
@@ -46,23 +57,23 @@ class SiswaController extends Controller
         $simpan = Siswa::create([
             'nama' => $request->nama,
             'kelas_id' => $request->kelas_id,
-            'point' => $request->point
+            'point' => 0
         ]);
-        return  redirect('siswa');
+        return  redirect('siswa')->with('toast_success','Berhasil');
     }
 
     public function update($id, Request $request)
     {
         $siswa = Siswa::find($id);
         $siswa->update($request->except('token','_method'));
-        return  redirect('siswa');
+        return  redirect('siswa')->with('toast_success','Berhasil');
     }
 
     public function hapus($id)
     {
         $hapus = Siswa::find($id);
         $hapus->delete();
-        return  redirect('siswa');
+        return  redirect('siswa')->with('toast_success','Berhasil');
     }
 
     public function siswaimportexcel(Request $request)
@@ -90,7 +101,49 @@ class SiswaController extends Controller
     {
     DB::table('siswa')->update(['point' => 0]);
 
-    return back();
+    return back()->with('toast_success','Berhasil');
+    }
+
+    public function naikKelasMassal(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'kelas_asal' => 'required|exists:kelas,id',
+            'kelas_tujuan' => 'required',
+        ]);
+
+        // Cari semua siswa di kelas asal
+        $siswa = Siswa::where('kelas_id', $request->input('kelas_asal'))->get();
+
+        // Update kelas siswa
+        if ($request->input('kelas_tujuan') == 'lulus') {
+            foreach ($siswa as $sis) {
+                // Hapus data siswa
+                $sis->delete();
+                // Hapus data dari tabel terkait
+                // Laporan::where('siswa_id', $sis->id)->delete();
+
+            }
+
+            return back();
+        } else {
+        foreach ($siswa as $sis) {
+            $sis->kelas_id = $request->input('kelas_tujuan');
+            $sis->save();
+
+            // Perbarui kelas di tabel laporan
+            Laporan::where('siswa_id', $sis->id)->update(['kelas_id' => $request->input('kelas_tujuan')]);
+
+            // Perbarui kelas di tabel peserta
+            Peserta::where('siswa_id', $sis->id)->update(['kelas_id' => $request->input('kelas_tujuan')]);
+
+            // Perbarui kelas di tabel prestasi
+            Prestasi::where('siswa_id', $sis->id)->update(['kelas_id' => $request->input('kelas_tujuan')]);
+
+        }
+
+        return back()->with('toast_success','Berhasil');
+    }
     }
 
 }

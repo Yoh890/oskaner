@@ -16,13 +16,17 @@ class LaporanController extends Controller
 {
     public function index(Request $request)
     {
-        $laporanQuery = Laporan::with('kelas', 'pelanggaran', 'siswa');
+        $todayDate = Carbon::now()->format('Y-m-d');
+        $laporanQuery = Laporan::with('kelas', 'pelanggaran', 'siswa')->whereDate('created_at', $todayDate);
 
         $laporan = $laporanQuery->latest()->get();
         $kel = Kelas::all();
         $pel = Pelanggaran::all();
         $sis = Siswa::all();
-        $todayDate = Carbon::now()->format('Y-m-d');
+
+        $title = 'Hapus Laporan!';
+        $text = "Apakah anda yakin?";
+        confirmDelete($title, $text);
 
         //dd($admin);
         return  view('laporan.index',compact(['laporan','kel','pel','sis']));
@@ -60,14 +64,14 @@ class LaporanController extends Controller
     {
         $laporan = Laporan::find($id);
         $laporan->update($request->except('token','_method'));
-        return  redirect('laporan');
+        return  back()->with('toast_success','Berhasil');
     }
 
     public function hapus($id)
     {
         $hapus = Laporan::find($id);
         $hapus->delete();
-        return  redirect('laporan');
+        return  back()->with('toast_success','Berhasil');
     }
 
     public function hapusdat()
@@ -77,7 +81,7 @@ class LaporanController extends Controller
 
     DB::table('laporan')->delete();
 
-    return redirect()->back()->with('toast_success', 'Semua data absen peserta berhasil dihapus.');
+    return back()->with('toast_success', 'Semua laporan berhasil dihapus.');
 }
 
 public function rekap(Request $request)
@@ -86,9 +90,9 @@ public function rekap(Request $request)
 
         $mulai = $request->input('mulai');
         $akhir = $request->input('akhir');
-        if ($mulai && $akhir) {
+        // if ($mulai && $akhir) {
             $laporanQuery->whereBetween('created_at', [$mulai, $akhir]);
-        }
+        // }
 
         $kelasIdFilter = $request->input('kelas');
         if ($kelasIdFilter) {
@@ -99,10 +103,18 @@ public function rekap(Request $request)
             $laporanQuery->where('pelanggaran_id', $pelIdFilter);
         }
 
+        // Menghitung jumlah kegiatan yang sesuai filter
+        $jumlah = Laporan::count();
+
         $laporan = $laporanQuery->latest()->get();
         $kel = Kelas::all();
         $pel = Pelanggaran::all();
         $sis = Siswa::all();
-        return  view('rekap.laporan', compact(['laporan','kel','pel','sis']));
+
+        $title = 'Hapus semua laporan!';
+        $text = "Menghapus semua laporan juga akan mereset poin, apakah anda yakin?";
+        confirmDelete($title, $text);
+
+        return  view('rekap.laporan', compact(['laporan','kel','pel','sis','jumlah']));
     }
 }

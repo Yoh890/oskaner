@@ -2,14 +2,16 @@
 @section('content')
 
 <div class="card-header">
-    <h3 class="card-title">Daftar Peserta Ekstrakurikuler {{ $ekstra->ekstra }}</h3>
-  </div>
+    <div class="d-flex justify-content-between align-items-center">
+        <h3 class="card-title">Daftar Peserta Ekstrakurikuler {{ $ekstra->ekstra }}</h3>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+        </button>
+    </div>
+</div>
   <!-- /.card-header -->
   <div class="card-body">
     <div class="row">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        Tambah Peserta
-      </button>&nbsp;
       {{-- <button type="button" class="btn btn-success" data-toggle="modal" data-target="#import">
         Import
       </button>&nbsp; --}}
@@ -54,14 +56,14 @@
         <td>{{$row->alpa}}</td>
         <td>{{$row->predikat}}</td>
         <td>{{$row->deskripsi}}</td>
-        <td><a class="btn btn-danger" href="{{ route('peserta_hapus', $row->id) }}" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')"><i class="fa fa-trash"></i></a></td>
+        <td><a class="btn btn-danger" href="{{ route('peserta_hapus', $row->id) }}" data-confirm-delete="true"><i class="fa fa-trash" data-confirm-delete="true"></i></a></td>
       </tr>
       @endforeach
       </tbody>
     </table>
   </div>
 
-    <!-- Modal Import-->
+    {{-- <!-- Modal Import-->
     <div class="modal fade" id="import" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -85,7 +87,7 @@
             </form>
           </div>
         </div>
-      </div>
+      </div> --}}
 
   <!-- Modal Tambah-->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

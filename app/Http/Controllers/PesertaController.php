@@ -24,6 +24,10 @@ class PesertaController extends Controller
         $kel = Kelas::all();
         $sis = Siswa::all();
 
+        $title = 'Hapus Peserta!';
+        $text = "Apakah anda yakin?";
+        confirmDelete($title, $text);
+
         //dd($admin);
         return  view('ekstrakurikuler.peserta',compact(['peserta','ekstra','kel','sis']));
     }
@@ -33,23 +37,27 @@ class PesertaController extends Controller
         $simpan = Peserta::create([
             'siswa_id' => $request->siswa_id,
             'kelas_id' => $request->kelas_id,
-            'ekstra_id' => $id
+            'ekstra_id' => $id,
+            'hadir' => 0,
+            'sakit' => 0,
+            'ijin' => 0,
+            'alpa' => 0
         ]);
-        return back();
+        return back()->with('toast_success','Berhasil');
     }
 
     public function update($id, Request $request)
     {
         $peserta = Peserta::find($id);
         $peserta->update($request->except('token','_method'));
-        return back();
+        return back()->with('toast_success','Berhasil');
     }
 
     public function hapus($id)
     {
         $hapus = Peserta::find($id);
         $hapus->delete();
-        return back();
+        return back()->with('toast_success','Berhasil');
     }
 
     public function reset($ekstra_id)

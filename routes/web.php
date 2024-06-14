@@ -28,13 +28,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 Route::get('/', [PrestasiController::class,'welcome']);
 
 Route::group(['middleware' => ['auth']], function (){
     Route::get('/dashboard', [SiswaController::class,'dashboard'])->name('dashboard');
+    Route::get('/admin', function () {
+        return view('admin');
+    });
 });
 
 Route::group(['middleware' => ['auth','ceklevel:admin,waka']], function (){
@@ -55,6 +55,7 @@ Route::group(['middleware' => ['auth','ceklevel:admin,waka,bk,osis']], function 
     Route::put('/siswa/update/{id}', [SiswaController::class,'update'])->name('sis_update');
     Route::POST('/siswa/import', [SiswaController::class,'siswaimportexcel'])->name('sis_import');
     Route::get('/siswa/view/{id}', [SiswaController::class,'view'])->name('sis_view');
+    Route::post('/siswa/naik-kelas-massal', [SiswaController::class, 'naikKelasMassal'])->name('siswa.naikKelasMassal');
 
     Route::get('/pelanggaran', [PelanggaranController::class,'index'])->name('pel');
     Route::get('/pelanggaran/tambah', [PelanggaranController::class,'tambah'])->name('pel_tambah');
@@ -76,7 +77,7 @@ Route::group(['middleware' => ['auth','ceklevel:admin,waka,bk,osis']], function 
     Route::get('/laporan/hapus/{id}', [LaporanController::class,'hapus'])->name('lap_hapus');
     Route::get('/laporan/ubah/{id}', [LaporanController::class,'ubah'])->name('lap_ubah');
     Route::put('/laporan/update/{id}', [LaporanController::class,'update'])->name('lap_update');
-    Route::delete('/laporan/hapusall', [LaporanController::class, 'hapusdat'])->name('lapdat_hapus');
+    Route::get('/laporan/hapusall', [LaporanController::class, 'hapusdat'])->name('lapdat_hapus');
 
     Route::get('/rekap/pelanggaran', [SiswaController::class,'rekap'])->name('rekap_pelanggaran');
     Route::get('/rekap/laporan', [LaporanController::class,'rekap'])->name('rekap_laporan');

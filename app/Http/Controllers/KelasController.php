@@ -13,6 +13,10 @@ class KelasController extends Controller
         $kelas =DB::table('kelas')
         ->get();
 
+        $title = 'Hapus Kelas!';
+        $text = "Apakah anda yakin?";
+        confirmDelete($title, $text);
+
         //dd($admin);
         return  view('kelas.index',compact(['kelas']));
     }
@@ -27,7 +31,7 @@ class KelasController extends Controller
         $simpan = Kelas::create([
             'kelas' => $request->kelas
         ]);
-        return  redirect('kelas')->with('tos_sukses','Berhasil Menambah Kelas');
+        return  back()->with('toast_sukses','Berhasil Menambah Kelas');
     }
 
     public function ubah($id)
@@ -40,13 +44,13 @@ class KelasController extends Controller
     {
         $kelas = Kelas::find($id);
         $kelas->update($request->except('token','_method'));
-        return  redirect('kelas');
+        return  back()->with('toast_success','Berhasil');
     }
 
     public function hapus($id)
     {
         $hapus = Kelas::find($id);
         $hapus->delete();
-        return  redirect('kelas');
+        return  back()->with('toast_success','Berhasil');
     }
 }

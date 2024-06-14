@@ -3,13 +3,13 @@
 
 <div class="card">
     <div class="card-header">
-        <a href="{{ url()->previous() }}" class="btn btn-danger" style="position:left: 20px;"><i class="fa fa-chevron-left" aria-hidden="true"></i>&nbsp&nbspKembali</a>
+        <a href="{{ url()->previous() }}" class="btn btn-danger" style="position:left: 20px;"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
     </div>
 
     <div class="card-body">
         <div class="row">
             <div class="col-md-12">
-                <h4>Nama : {{ $siswa->nama }}</h4>
+                <h2><b>{{ $siswa->nama }}</b></h2>
                 <span>Kelas : {{ $siswa->kelas->kelas }}</span><br>
                 <span>Point : {{ $siswa->point }}</span><br>
                 <span>Ekstrakurikuler : {{ $ek }}</span><br>
@@ -25,6 +25,7 @@
                         <th>Point</th>
                         <th>Pelapor</th>
                         <th>Tanggal</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,6 +35,7 @@
                         <td>{{ $row->point }}</td>
                         <td>{{ $row->pelapor }}</td>
                         <td>{{ $row->updated_at }}</td>
+                        <td><a class="btn btn-danger" href="{{ route('lap_hapus', $row->id) }}" data-confirm-delete="true"><i class="fa fa-trash" data-confirm-delete="true"></i></a></td>
                     </tr>
                     @endforeach
                 </tbody>

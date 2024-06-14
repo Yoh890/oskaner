@@ -13,12 +13,15 @@ class EkskulController extends Controller
 {
     public function index(Request $request)
     {
+        $todayDate = Carbon::now()->format('Y-m-d');
         $ekskulQuery = Ekskul::with('ekstra');
 
         $mulai = $request->input('mulai');
         $akhir = $request->input('akhir');
         if ($mulai && $akhir) {
             $ekskulQuery->whereBetween('tgl', [$mulai, $akhir]);
+        }else {
+            $ekskulQuery->where('tgl', $todayDate);
         }
 
         // Filter berdasarkan ekstrakurikuler
@@ -27,12 +30,19 @@ class EkskulController extends Controller
             $ekskulQuery->where('ekstra_id', $ekstraIdFilter);
         }
 
+        // Menghitung jumlah kegiatan yang sesuai filter
+        $jumlah = $ekskulQuery->count();
+
         $ekskul = $ekskulQuery->latest()->get();
         $eks = Ekstra::all();
         $todayDate = Carbon::now()->format('Y-m-d');
 
+        $title = 'Hapus Laporan!';
+        $text = "Apakah anda yakin?";
+        confirmDelete($title, $text);
+
         //dd($admin);
-        return  view('ekstrakurikuler.ekskul',compact(['ekskul','eks']));
+        return  view('ekstrakurikuler.ekskul',compact(['ekskul','eks','jumlah']));
     }
 
     public function simpan(Request $request)
@@ -46,20 +56,20 @@ class EkskulController extends Controller
             'pelapor' => $user->name,
             'tgl' => $request->tgl
         ]);
-        return  redirect('ekskul')->with('toast_success','Berhasil menambahkan laporan ekkstrakurikuler');
+        return  back()->with('toast_success','Berhasil menambahkan laporan ekstrakurikuler');
     }
 
     public function update($id, Request $request)
     {
         $ekskul = Ekskul::find($id);
         $ekskul->update($request->except('token','_method'));
-        return  redirect('ekskul');
+        return  back()->with('toast_success','Berhasil');
     }
 
     public function hapus($id)
     {
         $hapus = Ekskul::find($id);
         $hapus->delete();
-        return  redirect('ekskul');
+        return  back()->with('toast_success','Berhasil');
     }
 }

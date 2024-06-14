@@ -2,10 +2,11 @@
 @section('content')
 
 <div class="card-header">
-    <h3 class="card-title">Rekap Data Absen Pelatih Ekstrakurikuler</h3>
+    <h3 class="card-title">Rekap Data Latihan dan Pelatih Ekstrakurikuler</h3>
   </div>
   <!-- /.card-header -->
   <div class="card-body">
+
     <div class="form-group">
     <form action="" method="GET">
         <div class="row">
@@ -26,16 +27,33 @@
                 </select>
             </div>
             <div class="col-md-3">
-                <button type="submit" class="btn btn-secondary">Filter Data</button>
+                <button type="submit" class="btn btn-secondary">Tampilkan</button>
             </div>
         </div>
     </form>
     </div>
     <hr>
+    Total Laporan {{ $jumlah }} Data
+    <table id="example3" class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>Jumlah Latihan</th>
+          <th>Kehadiran Pelatih</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>{{ $latihanBulanIni }}</td>
+          <td>{{ $pelatihBulanIni }}</td>
+        </tr>
+        </tbody>
+      </table>
+    <hr>
     <table id="rekap" class="table table-bordered table-striped">
       <thead>
       <tr>
         <th>#</th>
+        <th>Latihan</th>
         <th>Kehadiran</th>
         <th>Ekstrakurikuler</th>
         <th>Tanggal</th>
@@ -46,6 +64,7 @@
 @foreach($pelatih as $row)
       <tr>
         <td>{{$loop->iteration}}</td>
+        <td>{{$row->latihan}}</td>
         <td>{{$row->kehadiran}}</td>
         <td>{{$row->ekstra->ekstra}}</td>
         <td>{{$row->created_at}}</td>
@@ -60,7 +79,7 @@
                 </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" data-toggle="modal" data-target="#editModal-{{ $row->id }}">Edit</a>
-                <a class="dropdown-item" href="{{ route('ekstra_hapus', $row->id) }}" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</a>
+                <a class="dropdown-item" href="{{ route('ekstra_hapus', $row->id) }}" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</a>
             </div>
             </div>
         </div>

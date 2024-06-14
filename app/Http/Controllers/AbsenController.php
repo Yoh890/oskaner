@@ -57,21 +57,21 @@ class AbsenController extends Controller
         'waktu_absen' => now(),
     ]);
 
-        return back()->with('toast_success','Berhasil Absen');
+        return back()->with('toast_success','Berhasil');
     }
 
     public function update($id, Request $request)
     {
         $absen = Absen::find($id);
         $absen->update($request->except('token','_method'));
-        return back();
+        return back()->with('toast_success','Berhasil');
     }
 
     public function hapus($id)
     {
         $hapus = Absen::find($id);
         $hapus->delete();
-        return back();
+        return back()->with('toast_success','Berhasil');
     }
 
     public function hapusdat($ekstra_id)

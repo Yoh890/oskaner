@@ -14,6 +14,10 @@ class PenggunaController extends Controller
         $user =DB::table('users')
         ->get();
 
+        $title = 'Hapus Pengguna!';
+        $text = "Apakah anda yakin?";
+        confirmDelete($title, $text);
+
         //dd($admin);
         return  view('pengguna',compact(['user']));
     }
@@ -26,20 +30,20 @@ class PenggunaController extends Controller
             'level' => $request->level,
             'password' => Hash::make($request->password),
         ]);
-        return  redirect('pengguna');
+        return  back()->with('toast_success','Berhasil');
     }
 
     public function update($id, Request $request)
     {
         $user = User::find($id);
         $user->update($request->except('token','_method'));
-        return  redirect('pengguna');
+        return  back()->with('toast_success','Berhasil');
     }
 
     public function hapus($id)
     {
         $hapus = User::find($id);
         $hapus->delete();
-        return  redirect('pengguna');
+        return  back()->with('toast_success','Berhasil');
     }
 }

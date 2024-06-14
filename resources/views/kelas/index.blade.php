@@ -2,14 +2,15 @@
 @section('content')
 
 <div class="card-header">
-    <h3 class="card-title">Kelas</h3>
-  </div>
+    <div class="d-flex justify-content-between align-items-center">
+        <h3 class="card-title">Kelas</h3>
+        <button type="button" class="mb-0 btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+        </button>
+    </div>
+</div>
   <!-- /.card-header -->
   <div class="card-body">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        Tambah
-      </button>
-    <hr>
     <table id="example1" class="table table-bordered table-striped">
       <thead>
       <tr>
@@ -37,7 +38,7 @@
                 </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" data-toggle="modal" data-target="#editModal-{{ $row->id }}">Edit</a>
-                <a class="dropdown-item" href="{{ route('kel_hapus', $row->id) }}" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</a>
+                <a class="dropdown-item" href="{{ route('kel_hapus', $row->id) }}" data-confirm-delete="true">Hapus</a>
             </div>
             </div>
         </td>

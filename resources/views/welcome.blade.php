@@ -31,7 +31,7 @@
 		<section id="hero">
 			<h2>Selamat Datang di Website E-Kesiswaan</h2>
 			<p>E-Kesiswaan SMKN 6 Jember</p>
-			{{-- <button>Masuk</button> --}}
+			<a href="./login"><button>Masuk</button></a>
 		</section>
         <section id="activities">
             <h2>Menu</h2>

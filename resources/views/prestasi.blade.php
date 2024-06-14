@@ -2,14 +2,15 @@
 @section('content')
 
 <div class="card-header">
-    <h3 class="card-title">Data Prestasi</h3>
-  </div>
+    <div class="d-flex justify-content-between align-items-center">
+        <h3 class="card-title">Data Prestasi</h3>
+        <button type="button" class="mb-0 btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+        </button>
+    </div>
+</div>
   <!-- /.card-header -->
   <div class="card-body">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        Tambah
-      </button>
-    <hr>
     <div class="form-group">
         <form action="" method="GET">
             <div class="row">
@@ -57,7 +58,7 @@
                 </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" data-toggle="modal" data-target="#editModal-{{ $row->id }}">Edit</a>
-                <a class="dropdown-item" href="{{ route('prestasi_hapus', $row->id) }}" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</a>
+                <a class="dropdown-item" href="{{ route('prestasi_hapus', $row->id) }}" data-confirm-delete="true">Hapus</a>
             </div>
             </div>
         </td>
@@ -83,7 +84,7 @@
             <div class="form-group">
                 <label for="">Kelas</label>
                 <select name="kelas_id" id="kelasan" class="form-control">
-                    <option selected disabled>Silahkan Dipilih</option>
+                    <option selected disabled>Pilih Kelas</option>
                     @foreach($kel as $kelas)
                         <option value="{{ $kelas->id }}">{{ $kelas->kelas }}</option>
                     @endforeach
@@ -93,7 +94,7 @@
           <div class="form-group">
             <label for="">Nama</label>
                           <select name="siswa_id" id="siswaan" class="form-control">
-                              <option selected disabled>Silahkan Dipilih</option>
+                              <option selected disabled>Pilih Siswa</option>
                               @foreach($sis as $siswa)
                                   <option value="{{ $siswa->id }}" data-kelas-id="{{ $siswa->kelas_id }}">{{ $siswa->nama }}</option>
                               @endforeach
