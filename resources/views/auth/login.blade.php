@@ -29,7 +29,12 @@
                             <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
 
                             <div class="col-md-6">
+                                <div class="input-group">
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="fa fa-eye" id="passwordIcon"></i>
+                                </button>
+                                </div>
 
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
@@ -58,7 +63,7 @@
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                                     <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
+                                        {{ __('Ingat Saya') }}
                                     </label>
                                 </div>
                             </div>
@@ -83,4 +88,22 @@
         </div>
     </div>
 </div>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordField = document.getElementById('password');
+        const passwordIcon = document.getElementById('passwordIcon');
+
+        togglePassword.addEventListener('click', function () {
+            // Toggle the type attribute
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+
+            // Toggle the eye/eye-slash icon
+            passwordIcon.classList.toggle('fa-eye');
+            passwordIcon.classList.toggle('fa-eye-slash');
+        });
+    });
+</script>
 @endsection

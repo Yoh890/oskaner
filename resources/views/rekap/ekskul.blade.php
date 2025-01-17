@@ -4,7 +4,7 @@
 <div class="card-header">
     <div class="d-flex justify-content-between align-items-center">
     <h3 class="card-title">Rekap Data Latihan dan Pelatih Ekstrakurikuler</h3>
-    <button type="button" class="mb-0 btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-print"></i></button>
+    {{-- <button type="button" class="mb-0 btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-print"></i></button> --}}
     </div>
   </div>
   <!-- /.card-header -->
